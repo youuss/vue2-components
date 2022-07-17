@@ -10,8 +10,8 @@
     "examples/*"
   ],
   "scripts": {
-    "dev": "cd site && npm run dev",
-    "site": "cd site && npm run build"
+    "dev": "cd site && pnpm -w run dev",
+    "npm:dev": "cd site && npm run dev"
   },
   "dependencies": {
     "@babel/runtime": "^7.14.8",
