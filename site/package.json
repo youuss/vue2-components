@@ -1,0 +1,10 @@
+{
+  "name": "vue2-components-site",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:preview": "vite build --mode preview",
+    "build:intranet": "vite build --mode intranet"
+  }
+}
