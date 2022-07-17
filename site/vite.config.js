@@ -1,9 +1,9 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import { createVuePlugin } from 'vite-plugin-vue2';
-import vitePluginDoc from '../plugins/vite-plugin-doc/main';
+import vitePluginDoc from '../plugins/vite-plugin-doc';
+import ScriptSetup from 'unplugin-vue2-script-setup/vite';
 import matter from 'gray-matter';
-import { transformSync } from '@babel/core';
 
 // https://vitejs.dev/config/
 export default ({ mode }) =>
@@ -34,6 +34,7 @@ export default ({ mode }) =>
         include: /(\.md|\.vue)$/,
         jsx: true,
       }),
+      ScriptSetup({}),
       vitePluginDoc({
         markdown: {
           container(md, container) {
@@ -72,20 +73,16 @@ export default ({ mode }) =>
           before({ source, file, md}) {
             demoImports = {};
             demoCodeImports = {};
-            console.log(source)
 
             source.replace(/:::\s*demo\s+([\\/.\w-]+)/g, (demoStr, relativeDemoPath) => {
               const demoPathOnlyLetters = relativeDemoPath.replace(/[^a-zA-Z\d]/g, '');
               const demoDefName = `Demo${demoPathOnlyLetters}`;
               const demoCodeDefName = `Demo${demoPathOnlyLetters}Code`;
-              console.log(demoPathOnlyLetters, demoDefName, demoCodeDefName, relativeDemoPath)
               demoImports[demoDefName] = `import ${demoDefName} from './${relativeDemoPath}.vue';`;
               demoCodeImports[demoCodeDefName] = `import ${demoCodeDefName} from './${relativeDemoPath}.vue?raw';`;
-              console.log(demoImports[demoDefName], demoCodeImports[demoCodeDefName])
             });
 
             const { content, data: pageData } = matter(source);
-            console.log('pageData', pageData)
       
             return content;
           },
@@ -97,18 +94,25 @@ export default ({ mode }) =>
               .map((key) => demoCodeImports[key])
               .join('\n');
 
-            console.log(demoDefsStr,demoCodesStr )
             const vueSource = `
                 <template>
                   <div name="DEMO">${result.html.replace(/class=/g, 'className=')}</div>
                 </template>
-                <script setup>
+                <script>
                 ${demoDefsStr}
                 ${demoCodesStr}
-                console.log(111)
+                export default {
+                  components: {
+                    ${Object.keys(demoImports).join(',')}
+                  },
+                  data() {
+                    return {
+                      ${Object.keys(demoCodeImports).join(',')}
+                    }
+                  }
+                }
                 </script>
               `;
-              console.log(vueSource)
       
             return vueSource;
           },

@@ -1,5 +1,5 @@
 <template>
   <div>
-    这是button展示区
+    <mis-button/>
   </div>
 </template>
