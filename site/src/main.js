@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import ComponentsLib from '../../lib'
+import routes from '../router/demoRoutes'
 
 Vue.use(VueRouter);
 Vue.use(ElementUI)
@@ -11,7 +12,7 @@ Vue.use(ComponentsLib)
 
 const router = new VueRouter({
   mode: 'history',
-  routes: []
+  routes
 });
 
 new Vue({

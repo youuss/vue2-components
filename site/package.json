@@ -5,7 +5,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "build:preview": "vite build --mode preview",
-    "build:intranet": "vite build --mode intranet"
+    "build:intranet": "vite build --mode intranet",
+    "routes": "node scripts/genrateRoutes.mjs"
   },
   "dependencies": {
     "element-ui": "^2.15.9"
